@@ -1,5 +1,7 @@
-const { EmbedBuilder } = require('discord.js');
-const { primaryColor } = require('../config.json');
+import { EmbedBuilder } from 'discord.js';
+import fs from 'fs';
+
+const { primaryColor } = JSON.parse(fs.readFileSync('./config.json'));
 const embedColor = parseInt(primaryColor, 16);
 
-module.exports = () => new EmbedBuilder().setColor(embedColor);
+export default function() { return new EmbedBuilder().setColor(embedColor) };

@@ -1,5 +1,5 @@
 {
-    "token": "",
+    "token": "DISCORD_BOT_TOKEN",
     "prefix": "pp.",
-    "primaryColor": ""
+    "primaryColor": "FFD700"
 }

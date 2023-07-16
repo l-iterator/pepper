@@ -1,23 +1,26 @@
-const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
+import { Client, GatewayIntentBits, Partials, Collection } from 'discord.js';
+import fs from 'fs';
+
+import createFirmEmbed from './utils/embed.js';
+import initDB from './utils/initdb.js'
+import commands from './commands/index.js';
+
+const { token, prefix } = JSON.parse(fs.readFileSync('./config.json'));
+
 const client = new Client({ intents: [ 
     GatewayIntentBits.DirectMessages,
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,], partials: [Partials.Channel] });
-const { token, prefix } = require('./config.json');
-const createFirmEmbed = require('./utils/embed.js');
-const fs = require('fs');
+
+initDB(client);
 
 client.commands = new Collection();
 const helpData = new Collection();
 
-
-const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
-
-for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
+for (const command of commands) {
     if (!(command.args)) command.args = [];
-    const oneLineCommandHelp = prefix + command.name + " " + command.args.map(arg => arg.required ? `<${arg.name}>` : `[${arg.name}]`).join(" ") + " " + command.description;
+    const oneLineCommandHelp = '`' + prefix + command.name + (command.args.length ? " " : "") + command.args.map(arg => arg.required ? `<${arg.name}>` : `[${arg.name}]`).join(" ") + "` - " + command.description;
     command.requiredArgs = command.args.filter(c => c.required).length;
 
     const commandArgs = command.args.map(param => {
@@ -30,9 +33,7 @@ for (const file of commandFiles) {
     const commandHelpEmbed = createFirmEmbed()
         .setTitle(`Справка по команде ${command.name}`)
         .setDescription(oneLineCommandHelp)
-        .addFields(...commandArgs);
-    console.log(command.name);
-
+        .addFields({name: "Описание", value: command.verboseDescription}, ...commandArgs);
 
     command.helpEmbed = commandHelpEmbed
     
@@ -61,10 +62,19 @@ client.on("messageCreate", async message => {
 
     if (!client.commands.has(command)) return;
     try {
-        client.commands.get(command).execute(message, args);
+        const commandData = client.commands.get(command);
+        if (args.length < commandData.requiredArgs) {
+            if (commandData.requiredArgs - args.length == 1) {
+                message.reply(`Пропущен обязательный аргумент: ${commandData.args[0].name}. Напиши ${prefix}help ${commandData.name} для более подробной информации!`);
+            } else {
+                message.reply(`Пропущены обязательные аргументы: ${commandData.args.slice(args.length, commandData.requiredArgs).join(", ")}. Напиши ${prefix}help ${commandData.name} для более подробной информации!`);
+            }
+        } else {
+            await commandData.execute(message, args);
+        }
     } catch (error) {
         console.error(error);
-        message.reply("There was an issue executing that command!");
+        message.reply("Неизвестная ошибка выполнения команды, сообщи Макасу или Сибе!");
     }
 });
 // Other code

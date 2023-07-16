@@ -1,0 +1,13 @@
+{
+    "shootContestants": [
+        {"id": "339440156538961921", "nick": "reali_", "alive": true},
+        {"id": "277448371784908800", "nick": "oh_shiet", "alive": true},
+        {"id": "285391326550163457", "nick": "eternalnecromancer", "alive": true},
+        {"id": "312973781712764928", "nick": "ahsatanikaer", "alive": true}
+    ],
+    "shootStateRoles": {
+        "alive": "1117671555313442876",
+        "dead": "1117671552041885766"
+    },
+    "userData": {}
+}
