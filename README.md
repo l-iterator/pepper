@@ -19,6 +19,6 @@
 
 ## Если возникли вопросы с кодом
 
-Нузно запушить весь код в ветку `nightly` и задать вопрос в дискорде.
+Нужно запушить весь код в ветку `nightly` и задать вопрос в дискорде.
 
 https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches
