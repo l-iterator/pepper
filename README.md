@@ -2,8 +2,14 @@
 
 ## Установка
 
-1. Создать `config.json` из `config-template.json` и заполнить под свой вкус
-2. Можно запускать `node index.js`
+1. `git clone https://github.com/l-iterator/pepper.git`
+2. `npm install`
+3. Создать `config.json` из `config-template.json` и заполнить своими данными
+4. Можно запускать `node index.js`
+
+## Бэкапы
+
+Просто бэкапить `db.json` регулярно.
 
 ## Разработка
 
